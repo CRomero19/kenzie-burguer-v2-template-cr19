@@ -1,13 +1,24 @@
+import { useContext } from 'react';
 import CartProductCard from './CartProductCard';
-
 import { StyledCartProductList } from './style';
 import { StyledButton } from '../../../styles/button';
 import { StyledParagraph } from '../../../styles/typography';
+import { CartContext } from '../../../context/CartContext';
 
-const CartProductList = () => (
-  <StyledCartProductList>
+const CartProductList = () => {
+
+  const { cart } = useContext(CartContext);
+
+  return(
+    <StyledCartProductList>
     <ul>
-      <CartProductCard />
+      {cart ? (
+        cart.map((cartItem) => (
+          <CartProductCard key={cartItem.id} cartItem={cartItem} />
+        ))
+      ) : (
+        <p> Carregando... </p>
+      )}
     </ul>
 
     <div className='totalBox'>
@@ -20,6 +31,8 @@ const CartProductList = () => (
       Remover todos
     </StyledButton>
   </StyledCartProductList>
-);
+
+  )
+};
 
 export default CartProductList;
