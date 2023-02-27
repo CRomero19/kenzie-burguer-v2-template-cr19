@@ -7,7 +7,7 @@ import { CartContext } from '../../../context/CartContext';
 
 const CartProductList = () => {
 
-  const { cart } = useContext(CartContext);
+  const { cart, removeAllItens } = useContext(CartContext);
 
   return(
     <StyledCartProductList>
@@ -27,7 +27,7 @@ const CartProductList = () => {
       </StyledParagraph>
       <StyledParagraph className='total'>R$ 14,00</StyledParagraph>
     </div>
-    <StyledButton $buttonSize='default' $buttonStyle='gray'>
+    <StyledButton type='button' onClick={()=>removeAllItens()} $buttonSize='default' $buttonStyle='gray'>
       Remover todos
     </StyledButton>
   </StyledCartProductList>

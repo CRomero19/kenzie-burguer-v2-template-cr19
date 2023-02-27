@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
 import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
 import { createContext, useState, ReactNode } from 'react';
-import { IProduct } from '../components/ProductList';
 import { kenzieBurger } from '../services/api';
 
 interface ICartChildrenType {
@@ -26,6 +27,7 @@ export interface ICartContext {
   openCloseModal: () => void;
   addToCart: (product: IProduct) => void;
   removeItem: (clickedItem: IProduct) => void;
+  removeAllItens:() => void;
   filter: string;
   setFilter:React.Dispatch<React.SetStateAction<string>>;
   products:IProduct[];
@@ -68,7 +70,7 @@ export const CartProvider = ({ children }: ICartChildrenType) => {
       console.log('vsf');
     }
   };
-  const removeItem = (clickedItem) => {
+  const removeItem = (clickedItem: IProduct) => {
     const newCart = cart.filter((product) => product.id !== clickedItem.id);
     setCart(newCart);
     console.log('Produto removido!');
@@ -86,7 +88,7 @@ export const CartProvider = ({ children }: ICartChildrenType) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, modalVisibility, openCloseModal, addToCart, products, filter, setFilter, removeItem,filteredProducts}}
+      value={{ cart, modalVisibility, openCloseModal, addToCart, products, filter, setFilter, removeItem,removeAllItens,filteredProducts}}
     >
       {children}
     </CartContext.Provider>
