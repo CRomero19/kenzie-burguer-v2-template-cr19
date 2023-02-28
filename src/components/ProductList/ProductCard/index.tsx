@@ -2,8 +2,7 @@ import { useContext } from 'react';
 import { StyledProductCard } from './style';
 import { StyledButton } from '../../../styles/button';
 import { StyledParagraph, StyledTitle } from '../../../styles/typography';
-import { IProduct } from '..';
-import { CartContext } from '../../../context/CartContext';
+import { CartContext, IProduct } from '../../../context/CartContext';
 
 interface IProductCard {
   product: IProduct;

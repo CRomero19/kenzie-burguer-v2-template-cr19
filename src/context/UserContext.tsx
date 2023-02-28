@@ -1,23 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
-
+import  { AxiosError } from 'axios';
 import { createContext, useState, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { IDefaultChildrenProps } from './CartContext';
 import { kenzieBurger } from '../services/api';
 
-interface IUserChildrenType {
-  children: ReactNode;
-}
 interface IUser {
   id: number;
   name: string;
   email: string;
 }
-interface ILogin {
+interface ILoginFormValue {
   email: string;
   password: string;
 }
-interface IRegister {
+interface IRegisterFormValue {
   name: string;
   email: string;
   password: string;
@@ -28,14 +26,13 @@ interface IResponseAPI {
 }
 export interface IUserContext {
   user: IResponseAPI | null;
-  handleSubmitLogin: (formData: ILogin) => Promise<void>;
-  handleSubmitRegister: (formData: IRegister) => Promise<void>;
-  /* setUser:React.Dispatch<React.SetStateAction<IResponseAPI | null>>; */
+  handleSubmitLogin: (formData: ILoginFormValue) => Promise<void>;
+  handleSubmitRegister: (formData: IRegisterFormValue) => Promise<void>;
   handleLogout: () => void;
 }
 export const UserContext = createContext({} as IUserContext);
 
-export const UserProvider = ({ children }: IUserChildrenType) => {
+export const UserProvider = ({ children }: IDefaultChildrenProps) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<IResponseAPI | null>(null);
 
@@ -53,34 +50,36 @@ export const UserProvider = ({ children }: IUserChildrenType) => {
           setUser(response.data);
           navigate('/shop');
         } catch (error) {
-          console.log(error);
+          const err:any = error;
+          toast.error(err);
         }
       };
       autoLogin();
     }
   }, []);
 
-  const handleSubmitLogin = async (formData: ILogin) => {
+  const handleSubmitLogin = async (formData: ILoginFormValue) => {
     try {
       const response = await kenzieBurger.post('/login', formData);
       localStorage.setItem('@USERTOKEN', response.data.accessToken);
       localStorage.setItem('@USERID', response.data.user.id);
-      console.log(response);
       setUser(response.data);
-      console.log(`Bem vindo, ${response.data.user.name}`);
+      toast.success(`Bem vindo, ${response.data.user.name}`);
       navigate(`/shop`);
     } catch (error) {
-      console.log(error);
+      const err:any = error;
+      toast.error(err);
     }
   };
 
-  const handleSubmitRegister = async (formData: IRegister) => {
+  const handleSubmitRegister = async (formData: IRegisterFormValue) => {
     try {
       const response = await kenzieBurger.post('/users', formData);
-      console.log(`Cadastrado com sucesso!`);
+      toast.success(`Cadastrado com sucesso!`);
       navigate(`/`);
     } catch (error) {
-      console.log(error);
+      const err:any = error;
+      toast.error(err);
     }
   };
 

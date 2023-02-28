@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import ProductCard from './ProductCard';
 import { StyledProductList } from './style';
 import { CartContext } from '../../context/CartContext';

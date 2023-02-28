@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
+import axios from 'axios';
 import { createContext, useState, ReactNode } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { toast } from 'react-toastify';
 import { kenzieBurger } from '../services/api';
 
-interface ICartChildrenType {
+export interface IDefaultChildrenProps {
   children: ReactNode;
 }
 export interface IProduct {
@@ -36,7 +38,7 @@ export interface ICartContext {
 
 export const CartContext = createContext<ICartContext>({} as ICartContext);
 
-export const CartProvider = ({ children }: ICartChildrenType) => {
+export const CartProvider = ({ children }: IDefaultChildrenProps) => {
   const [cart, setCart] = useState<ICartItem[]>([]);
   const [filter, setFilter] = useState('');
   const [modalVisibility, setModalVisibility] = useState(false);
@@ -53,7 +55,8 @@ export const CartProvider = ({ children }: ICartChildrenType) => {
         });
         setProducts(response.data);
       } catch (error) {
-        console.log(error);
+        const err:any = error;
+        toast.error(err);
       }
     };
     getProducts();
@@ -62,25 +65,26 @@ export const CartProvider = ({ children }: ICartChildrenType) => {
   const openCloseModal = () => {
     setModalVisibility(!modalVisibility);
   };
+
   const addToCart = (product: IProduct) => {
     if (!cart.includes(product)) {
       setCart([...cart, product]);
-      console.log(cart);
+      toast.success('Produto adicionado');
     } else {
-      console.log('vsf');
+      toast.error('Produto ja adicionado');
     }
   };
   const removeItem = (clickedItem: IProduct) => {
     const newCart = cart.filter((product) => product.id !== clickedItem.id);
     setCart(newCart);
-    console.log('Produto removido!');
+    toast.info('Produto removido!');
   };
   const removeAllItens = () => {
     if (cart.length > 0) {
       setCart([]);
-      console.log('Todos os produtos foram removidos!');
+      toast.info('Todos os produtos foram removidos!');
     } else {
-      console.log('Não há produtos no carrinho!');
+      toast.info('Não há produtos no carrinho!');
     }
   };
 

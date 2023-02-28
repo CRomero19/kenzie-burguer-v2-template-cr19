@@ -6,13 +6,19 @@ interface IInputProps {
   name: string;
   register:any;
   type: string;
+  errors:any;
 }
 
-const Input = ({ label, type, register, name }:IInputProps) => (
-    <fieldset>
+const Input = ({ label, type, register, errors, name }:IInputProps) => {
+
+  console.log(errors)
+    return(
+      <fieldset>
       <StyledTextField label={label} type={type} {...register(name)} />
-      <StyledParagraph fontColor='red'>Erro</StyledParagraph>
+      
     </fieldset>
-  )
+    )
+
+}
 
 export default Input;
