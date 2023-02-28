@@ -26,10 +26,10 @@ const RegisterForm = () => {
 
   return (
   <StyledForm onSubmit={handleSubmit(handleSubmitRegister)}>
-    <Input label='Nome' name='name' type='text' register={register} errors={errors}/>
-    <Input label='Email' name='email' type='email' register={register} errors={errors}/>
-    <Input label='Senha' name='password' type='password' register={register} errors={errors}/>
-    <Input label='Confirmar senha' name='confirmpassword' type='password'  register={register} errors={errors}/>
+    <Input label='Nome'  type='text' register={register('name')} errors={errors.name}/>
+    <Input label='Email'  type='email' register={register('email')} errors={errors.email}/>
+    <Input label='Senha'  type='password' register={register('password')} errors={errors.password}/>
+    <Input label='Confirmar senha' type='password'  register={register('confirmpassword')} errors={errors.confirmpassword}/>
     <StyledButton type='submit'  $buttonSize='default' $buttonStyle='gray'>
       Cadastrar
     </StyledButton>

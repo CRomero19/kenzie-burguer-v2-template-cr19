@@ -1,24 +1,22 @@
+/* eslint-disable import/no-unresolved */
+import { FieldError, UseFormRegisterReturn } from 'react-hook-form/dist/types';
 import { StyledTextField } from '../../../styles/form';
 import { StyledParagraph } from '../../../styles/typography';
 
 interface IInputProps {
   label: string;
-  name: string;
-  register:any;
-  type: string;
-  errors:any;
+  register: UseFormRegisterReturn<string>;
+  type: 'text' | 'email' | 'password';
+  errors?: FieldError;
 }
 
-const Input = ({ label, type, register, errors, name }:IInputProps) => {
-
-  console.log(errors)
-    return(
-      <fieldset>
-      <StyledTextField label={label} type={type} {...register(name)} />
-      
+const Input = ({ label, type, register, errors }: IInputProps) =>  (
+    <fieldset>
+      <StyledTextField label={label} type={type} {...register} />
+      {errors?.message && (
+        <StyledParagraph fontColor='red'> {errors.message} </StyledParagraph>
+      )}
     </fieldset>
-    )
-
-}
+  );
 
 export default Input;

@@ -8,15 +8,10 @@ import { formLoginSchema } from './loginSchema';
 import { StyledButton } from '../../../styles/button';
 import { StyledForm } from '../../../styles/form';
 import Input from '../Input';
-import { UserContext } from '../../../context/UserContext';
-
-interface IUserLogin {
-  email: string;
-  password: string;
-}
+import { ILoginFormValue, UserContext } from '../../../context/UserContext';
 
 const LoginForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<IUserLogin>({
+  const { register, handleSubmit, formState: { errors } } = useForm<ILoginFormValue>({
     resolver: yupResolver(formLoginSchema)
   })
   
@@ -24,8 +19,8 @@ const LoginForm = () => {
 
   return (
     <StyledForm onSubmit={handleSubmit(handleSubmitLogin)}>
-      <Input label='Email' name='email' type='text' register={register} errors={errors} />
-      <Input label='Senha' name='password' type='password' register={register} errors={errors} />
+      <Input label='Email'  type='text' register={register('email')} errors={errors.email} />
+      <Input label='Senha'  type='password' register={register('password')} errors={errors.password} />
       <StyledButton type='submit' $buttonSize='default' $buttonStyle='green'>
         Entrar
       </StyledButton>

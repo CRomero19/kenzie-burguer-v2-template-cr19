@@ -11,11 +11,11 @@ interface IUser {
   name: string;
   email: string;
 }
-interface ILoginFormValue {
+export interface ILoginFormValue {
   email: string;
   password: string;
 }
-interface IRegisterFormValue {
+export interface IRegisterFormValue {
   name: string;
   email: string;
   password: string;
