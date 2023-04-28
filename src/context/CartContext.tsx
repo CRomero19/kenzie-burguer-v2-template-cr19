@@ -10,6 +10,7 @@ export interface IDefaultChildrenProps {
   children: ReactNode;
 }
 export interface IProduct {
+  quantidade: ReactNode;
   id: number;
   name: string;
   category: string;
@@ -17,6 +18,7 @@ export interface IProduct {
   img: string;
 }
 interface ICartItem {
+  quantidade: number;
   id: number;
   name: string;
   category: string;
@@ -34,6 +36,9 @@ export interface ICartContext {
   setFilter:React.Dispatch<React.SetStateAction<string>>;
   products:IProduct[];
   filteredProducts:IProduct[];
+  cartTotalPrice:()=>number;
+  addOneToQuantityOnProduct: (clickedItem: IProduct) => void;
+  removeOneToQuantityOoProduct: (clickedItem: IProduct) => void;
 }
 
 export const CartContext = createContext<ICartContext>({} as ICartContext);
@@ -67,13 +72,24 @@ export const CartProvider = ({ children }: IDefaultChildrenProps) => {
   };
 
   const addToCart = (product: IProduct) => {
-    if (!cart.includes(product)) {
-      setCart([...cart, product]);
+    const isProductAlreadyInCart = cart.some((p) => p.id === product.id);
+  
+    if (!isProductAlreadyInCart) {
+      const productWithQuantity = { ...product, quantidade: 1 };
+      setCart([...cart, productWithQuantity]);
       toast.success('Produto adicionado');
     } else {
-      toast.error('Produto ja adicionado');
+      const updatedCart = cart.map((p) => {
+        if (p.id === product.id) {
+          return { ...p, quantidade: p.quantidade + 1 }
+        }
+        return p;
+      });
+      setCart(updatedCart);
+      toast.success('Quantidade atualizada');
     }
   };
+
   const removeItem = (clickedItem: IProduct) => {
     const newCart = cart.filter((product) => product.id !== clickedItem.id);
     setCart(newCart);
@@ -90,9 +106,38 @@ export const CartProvider = ({ children }: IDefaultChildrenProps) => {
 
   const filteredProducts = products.filter(product=> product.name.toLowerCase().includes(filter.toLowerCase()) || product.category.toLowerCase().includes(filter.toLowerCase()))
 
+  const cartTotalPrice = () =>{
+    const totalValue = cart.reduce((acc, cur) => acc + (cur.price * cur.quantidade), 0);
+    return totalValue;
+  }
+
+  const addOneToQuantityOnProduct = (clickedItem: IProduct) =>{
+    const newQuantity = cart.map((p) => {
+      if (p.id === clickedItem.id) {
+        return { ...p, quantidade: p.quantidade + 1 }
+      }
+      return p;
+
+    });
+    setCart(newQuantity)
+    return;
+  }
+
+  const removeOneToQuantityOoProduct = (clickedItem: IProduct) =>{
+    const newQuantity = cart.map((p) => {
+      if (p.id === clickedItem.id) {
+        return { ...p, quantidade: p.quantidade - 1 }
+      }
+      return p;
+
+    });
+    setCart(newQuantity)
+    return;
+  }
+
   return (
     <CartContext.Provider
-      value={{ cart, modalVisibility, openCloseModal, addToCart, products, filter, setFilter, removeItem,removeAllItens,filteredProducts}}
+      value={{ cart, modalVisibility, openCloseModal, addToCart, products, filter, setFilter, removeItem,removeAllItens,filteredProducts,cartTotalPrice,addOneToQuantityOnProduct,removeOneToQuantityOoProduct}}
     >
       {children}
     </CartContext.Provider>

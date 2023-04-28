@@ -5,6 +5,17 @@ export const StyledCartProductCard = styled.li`
    align-items: center;
    gap: 10px;
 
+   .qnt{
+      color: grey;
+      display: flex;
+      font-weight: 900;
+      align-items: center;
+   }
+   span{
+      font-size: large;
+      display: flex;
+      align-items: center;
+   }
    .imageBox {
       display: flex;
       align-items: center;
